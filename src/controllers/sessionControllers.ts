@@ -63,8 +63,6 @@ const register = asyncHandler( async(req, res) => {
       html: `<html><body><p>Please click this link to confirm your email: </p><a href="${url}">${url}</a></body></html>`,
     })
 
-    console.log({transport})
-
     if (transport) {
       res.status(201).json({ message: "user created"})
     }
