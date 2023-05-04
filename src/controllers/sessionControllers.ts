@@ -41,11 +41,7 @@ const register = asyncHandler( async(req, res) => {
   
   //If user was added successfully, return user data and token
   if (user) {
-    res.status(201).json({
-        id: user.id,
-        name: user.name,
-        token: generateToken(user.id)
-    })
+    res.status(201).json({ message: "user created"})
   } else {
     res.status(400)
     throw new Error('Invalid credentials')
@@ -68,6 +64,16 @@ const login = asyncHandler( async(req, res) => {
       email
     }
   })
+
+  //Check if user exists and is activated
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  }
+  if (user.activated === false) {
+    res.status(401)
+    throw new Error('Confirm your email address')
+  }
 
   //Compare password hashes
   //Comparison seems dangerous TODO: check if it's safe
