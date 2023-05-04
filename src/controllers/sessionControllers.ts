@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs'
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
+//TODO: Database error messages are too descriptive
+
 //POST /api/users
 //@desc register
 const register = asyncHandler( async(req, res) => {
@@ -14,45 +16,39 @@ const register = asyncHandler( async(req, res) => {
     throw new Error('Missing data')
   }
 
-  try {
-    //Check if user exists
-    const userExists = await prisma.users.findUnique({
-      where: {
-        email
-      }
-    })
-    if (userExists) {
-      res.status(400)
-      throw new Error('User already exists')
+  //Check if user exists
+  const userExists = await prisma.users.findUnique({
+    where: {
+      email
     }
-  
-    //Generate password hash
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
-  
-    //Add user to database
-    const user = await prisma.users.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword
-      }
-    })
-    
-    //If user was added successfully, return user data and token
-    if (user) {
-      res.status(201).json({
-          id: user.id,
-          name: user.name,
-          token: generateToken(user.id)
-      })
-    } else {
-      res.status(400)
-      throw new Error('Invalid credentials')
+  })
+  if (userExists) {
+    throw new Error('User already exists')
+  }
+
+  //Generate password hash
+  const salt = await bcrypt.genSalt(10)
+  const hashedPassword = await bcrypt.hash(password, salt)
+
+  //Add user to database
+  const user = await prisma.users.create({
+    data: {
+      name,
+      email,
+      password: hashedPassword
     }
-  } catch(err) {
+  })
+  
+  //If user was added successfully, return user data and token
+  if (user) {
+    res.status(201).json({
+        id: user.id,
+        name: user.name,
+        token: generateToken(user.id)
+    })
+  } else {
     res.status(400)
-    throw new Error('Database error') 
+    throw new Error('Invalid credentials')
   }
 })
 
@@ -66,30 +62,25 @@ const login = asyncHandler( async(req, res) => {
     throw new Error('Missing data')
   }
 
-  try {
-    //Find user in database
-    const user = await prisma.users.findUnique({
-      where: {
-        email
-      }
-    })
-
-    //Compare password hashes
-    //Comparison seems dangerous TODO: check if it's safe
-    if (user && (await bcrypt.compare(password, user.password))) {
-      res.json({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          token: generateToken(user.id)
-      })
-    } else {
-        res.status(401)
-        throw new Error('Invalid credentials')
+  //Find user in database
+  const user = await prisma.users.findUnique({
+    where: {
+      email
     }
-  } catch(err) {
-    res.status(400)
-    throw new Error('Database error')
+  })
+
+  //Compare password hashes
+  //Comparison seems dangerous TODO: check if it's safe
+  if (user && (await bcrypt.compare(password, user.password))) {
+    res.json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user.id)
+    })
+  } else {
+      res.status(401)
+      throw new Error('Invalid credentials')
   }
 })
 
