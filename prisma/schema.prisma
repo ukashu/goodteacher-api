@@ -11,11 +11,53 @@ datasource db {
 }
 
 model users {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(25)
+  email         String          @unique @db.VarChar(254)
+  password      String          @db.VarChar(75)
+  type          accountType     @default(STUDENT)
+  created       DateTime        @default(now())
+  updated       DateTime        @updatedAt
+  activated     Boolean         @default(false)
+  classes       classes[]
+  tasks         tasks[]
+  users_classes users_classes[]
+}
+
+model classes {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(25)
+  owner         users           @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_id       Int
+  tasks         tasks[]
+  users_classes users_classes[]
+}
+
+model tasks {
   id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(25)
-  email     String   @unique @db.VarChar(254)
-  password  String   @db.VarChar(75)
+  content   String   @db.VarChar(255)
+  completed Boolean  @default(false)
+  user      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_id   Int
+  class     classes  @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  class_id  Int
   created   DateTime @default(now())
   updated   DateTime @updatedAt
-  activated Boolean  @default(false)
+}
+
+model users_classes {
+  user       users   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  class      classes @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_id    Int
+  class_id   Int
+  joined     Boolean @default(false)
+  user_alias String  @db.VarChar(25)
+
+  @@id([user_id, class_id])
+  @@unique([user_id, class_id])
+}
+
+enum accountType {
+  STUDENT
+  TEACHER
 }
