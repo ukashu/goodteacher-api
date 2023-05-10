@@ -3,10 +3,18 @@ const errorHandler = (err, req, res, next) => {
 
   res.status(statusCode)
 
-  res.json({
+  //handle zod errors
+  if (err.name === 'ZodError') {
+    res.json({
+      message: err.issues[0].message,
+      stack: process.env.NODE_ENV === 'production' ? null : err.stack
+    })
+  } else {
+    res.json({
       message: err.message,
       stack: process.env.NODE_ENV === 'production' ? null : err.stack
-  })
+    })
+  }
 }
 
 export default errorHandler

@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
-import { RegisterUserInput } from '../schemas/sessionSchemas.js'
+import { RegisterUserInput, LoginUserInput } from '../schemas/sessionSchemas.js'
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
@@ -62,6 +62,8 @@ const register = asyncHandler( async(req: Request<{}, {}, RegisterUserInput>, re
       html: `<html><body><p>Please click this link to confirm your email: </p><a href="${url}">${url}</a></body></html>`,
     })
     //TODO: on mailing error delete user from database 
+    //OR if user is not activated for 24 hours delete user from database 
+    //OR if user is not activated resend confirmation email on register
 
     if (transport) {
       res.status(201).json({ message: "user created"})
@@ -74,24 +76,19 @@ const register = asyncHandler( async(req: Request<{}, {}, RegisterUserInput>, re
 
 //POST /api/users/session
 //@desc login
-const login = asyncHandler( async(req, res) => {
-  const {email, password} = req.body
-
-  if (!email || !password) {
-    res.status(400)
-    throw new Error('Missing data')
-  }
+const login = asyncHandler( async(req: Request<{}, {}, LoginUserInput>, res: Response) => {
+  const body = req.body
 
   //Find user in database
   const user = await prisma.users.findUnique({
     where: {
-      email
+      email: body.email
     }
   })
 
   //Check if user exists and is activated
   if (!user) {
-    res.status(404)
+    res.status(401)
     throw new Error('Invalid credentials')
   }
   if (user.activated === false) {
@@ -101,7 +98,7 @@ const login = asyncHandler( async(req, res) => {
 
   //Compare password hashes
   //Comparison seems dangerous TODO: check if it's safe
-  if (user && (await bcrypt.compare(password, user.password))) {
+  if (user && (await bcrypt.compare(body.password, user.password))) {
     res.json({
         id: user.id,
         name: user.name,
