@@ -1,5 +1,5 @@
 import express from "express"
-import sessionRoutes from "./routes/sessionRoutes.js"
+import sessionRoutes from "./api/sessions/session.routes.js"
 import errorHandler from "./middleware/errorMiddleware.js"
 import 'dotenv/config'
 
