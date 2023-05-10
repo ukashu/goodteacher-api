@@ -1,3 +1,6 @@
+import { Request, Response } from 'express'
+import asyncHandler from 'express-async-handler'
+
 //@route GET /api/classes/:classId/students
 //@desc get all students in a class
 //@access private/teacher

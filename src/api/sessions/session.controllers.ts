@@ -3,8 +3,7 @@ import asyncHandler from 'express-async-handler'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
-import { RegisterUserInput, LoginUserInput } from './session.schemas.js'
-
+import { RegisterUserInput, LoginUserInput } from './session.schema.js'
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
