@@ -1,7 +1,10 @@
+import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
+import { RegisterUserInput } from '../schemas/sessionSchemas.js'
+
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
@@ -17,18 +20,13 @@ const transporter = nodemailer.createTransport({
 
 //POST /api/users
 //@desc register
-const register = asyncHandler( async(req, res) => {
-  const { name, email, password } = req.body
-
-  if (!name || !email || !password) {
-    res.status(400)
-    throw new Error('Missing data')
-  }
+const register = asyncHandler( async(req: Request<{}, {}, RegisterUserInput>, res: Response) => {
+  const body = req.body
 
   //Check if user exists
   const userExists = await prisma.users.findUnique({
     where: {
-      email
+      email: body.email
     }
   })
   if (userExists) {
@@ -37,14 +35,15 @@ const register = asyncHandler( async(req, res) => {
 
   //Generate password hash
   const salt = await bcrypt.genSalt(10)
-  const hashedPassword = await bcrypt.hash(password, salt)
+  const hashedPassword = await bcrypt.hash(body.password, salt)
 
   //Add user to database
   const user = await prisma.users.create({
     data: {
-      name,
-      email,
-      password: hashedPassword
+      name: body.name,
+      email: body.email,
+      password: hashedPassword,
+      type: body.type,
     }
   })
 
@@ -62,6 +61,7 @@ const register = asyncHandler( async(req, res) => {
       subject: 'Confirm Email',
       html: `<html><body><p>Please click this link to confirm your email: </p><a href="${url}">${url}</a></body></html>`,
     })
+    //TODO: on mailing error delete user from database 
 
     if (transport) {
       res.status(201).json({ message: "user created"})
