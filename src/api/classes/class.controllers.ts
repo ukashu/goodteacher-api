@@ -11,10 +11,32 @@ export const getMyClasses = asyncHandler(async (req: Request, res: Response) => 
   const user = res.locals.user //TODO: check if this is safe
 
   //if user is a teacher get all classes from classes table
+  if (user.accountType == 'TEACHER') {
+    const myClasses = await prisma.classes.findMany({
+      where: {
+        user_id: user.id,
+      },
+    })
 
-  //else if user is a student get all classes from students_classes table
+    //TODO: what happens if user is a teacher but has no classes?
 
-  //return classes
+    res.status(200).json({message: 'Query successful', myClasses})
+
+  } else if (user.accountType == 'STUDENT') {
+  //else if user is a student get all classes from users_classes table
+    const myClasses = await prisma.users_classes.findMany({
+      where: {
+        user_id: user.id,
+      },
+    })
+
+    res.status(200).json({message: 'Query successful', myClasses})
+    
+  } else {
+    //return error if user is not a teacher or student
+    res.status(401)
+    throw new Error('Not authorized')
+  }
 })
 
 //@route POST /api/classes
