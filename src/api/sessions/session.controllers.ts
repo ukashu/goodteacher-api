@@ -133,7 +133,7 @@ const confirmEmail = asyncHandler( async(req, res) => {
 // Generate JSON Web Token
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
+      expiresIn: '30d',
   })
 }
 
