@@ -1,0 +1,1 @@
+export type ResLocalsUser = {id: number, accountType: string}

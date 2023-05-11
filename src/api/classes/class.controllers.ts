@@ -1,15 +1,14 @@
 import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import { CreateClassInput, DeleteClassInput } from './class.schema.js'
+import { ResLocalsUser } from '../../util/types.js'
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
-
-type LocalsUser = {id: number, accountType: string}
 
 //@route GET /api/classes
 //@desc get all classes related to user
 //@access private/teacher || private/student
-export const getMyClasses = asyncHandler(async (req: Request, res: Response<{}, {user: LocalsUser}>) => {
+export const getMyClasses = asyncHandler(async (req: Request, res: Response<{}, {user: ResLocalsUser}>) => {
   const user = res.locals.user //TODO: check if this is safe
 
   //if user is a teacher get all classes from classes table
@@ -44,7 +43,7 @@ export const getMyClasses = asyncHandler(async (req: Request, res: Response<{}, 
 //@route POST /api/classes
 //@desc create a new class for user
 //@access private/teacher
-export const createClass = asyncHandler(async (req: Request<{}, {}, CreateClassInput>, res: Response<{}, {user: LocalsUser}>) => {
+export const createClass = asyncHandler(async (req: Request<{}, {}, CreateClassInput>, res: Response<{}, {user: ResLocalsUser}>) => {
   const user = res.locals.user //TODO: check if this is safe
 
   //destructure class data from req.body
@@ -71,7 +70,7 @@ export const createClass = asyncHandler(async (req: Request<{}, {}, CreateClassI
 //@route DELETE /api/classes/:classId
 //@desc delete a class
 //@access private/teacher
-export const deleteClass = asyncHandler(async (req: Request<DeleteClassInput>, res: Response<{}, {user: LocalsUser}>) => {
+export const deleteClass = asyncHandler(async (req: Request<DeleteClassInput>, res: Response<{}, {user: ResLocalsUser}>) => {
   const user = res.locals.user //TODO: check if this is safe
 
   //get class id from req.params

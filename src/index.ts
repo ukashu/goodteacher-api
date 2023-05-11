@@ -1,6 +1,7 @@
 import express from "express"
 import sessionRoutes from "./api/sessions/session.routes.js"
 import classRoutes from "./api/classes/class.routes.js"
+import studentRoutes from "./api/students/student.routes.js"
 import errorHandler from "./middleware/errorMiddleware.js"
 import 'dotenv/config'
 
@@ -12,6 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/users", sessionRoutes)
 app.use('/api/classes', classRoutes)
+app.use('/api/classes/:classId/students', studentRoutes)
 
 app.get('/', (req, res) => {
   res.send('API is running...')

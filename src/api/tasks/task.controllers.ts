@@ -15,7 +15,7 @@ import asyncHandler from 'express-async-handler'
 
 //@route PUT /api/classes/:classId/students/:studentId/tasks/:taskId
 //@desc change tasks status to completed
-//@access private/student
+//@access private/teacher || private/student
 
 //@route DELETE /api/classes/:classId/students/:studentId/tasks/:taskId
 //@desc delete a task for a student in a class
