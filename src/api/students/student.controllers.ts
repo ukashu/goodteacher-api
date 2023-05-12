@@ -11,12 +11,8 @@ const prisma = new PrismaClient()
 export const getStudentsInClass = asyncHandler(async (req: Request<GetStudentsInClassInput>, res: Response<{}, {user: ResLocalsUser}>) => {
   const user = res.locals.user //TODO: check if this is safe
 
-  console.log({user})
-
   //destructure classId from req.params
   const classId = Number(req.params.classId)
-
-  console.log({classId})
 
   //return error if user is not a teacher
   if (user.accountType != 'TEACHER') {
@@ -31,8 +27,6 @@ export const getStudentsInClass = asyncHandler(async (req: Request<GetStudentsIn
     },
   })
 
-  console.log({queriedClass})
-
   if (queriedClass.user_id != user.id) {
     res.status(401)
     throw new Error('Not authorized')
@@ -45,7 +39,6 @@ export const getStudentsInClass = asyncHandler(async (req: Request<GetStudentsIn
     },
   })
 
-  console.log({studentsInClass})
   //TODO: what happens if class has no students?
   //TODO: what happens if class does not exist?
   //TODO: return only important data
@@ -59,16 +52,10 @@ export const getStudentsInClass = asyncHandler(async (req: Request<GetStudentsIn
 export const addStudentToClass = asyncHandler(async (req: Request<AddStudentToClassInput['params'], {}, AddStudentToClassInput['body']>, res: Response<{}, {user: ResLocalsUser}>) => {
   const user = res.locals.user //TODO: check if this is safe
 
-  console.log({user})
-
   //destructure classId from req.params
   const classId = Number(req.params.classId)
 
-  console.log({params: req.params})
-
   const body = req.body
-
-  console.log({body})
 
   //return error if user is not a teacher
   if (user.accountType != 'TEACHER') {
@@ -83,8 +70,6 @@ export const addStudentToClass = asyncHandler(async (req: Request<AddStudentToCl
     },
   })
 
-  console.log({queriedClass})
-
   if (!queriedClass || queriedClass.user_id != user.id) {
     res.status(401)
     throw new Error('Not authorized')
@@ -96,8 +81,6 @@ export const addStudentToClass = asyncHandler(async (req: Request<AddStudentToCl
       email: body.studentEmail,
     },
   })
-
-  console.log({student})
 
   if (!student || student.type != 'STUDENT') {
     res.status(400)
@@ -117,8 +100,6 @@ export const addStudentToClass = asyncHandler(async (req: Request<AddStudentToCl
     throw new Error('Student is already in the class')
   }
 
-  console.log({userInClass})
-
   //add user to class in users_classes table
   const addedStudent = await prisma.users_classes.create({
     data: {
@@ -127,8 +108,6 @@ export const addStudentToClass = asyncHandler(async (req: Request<AddStudentToCl
       user_alias: body.studentAlias,
     },
   })
-
-  console.log({addedStudent})
 
   //TODO: less descriptive error messages
 
