@@ -111,23 +111,66 @@ export const createTask = asyncHandler(async (req: Request<CreateTaskInput["para
 //@route PUT /api/classes/:classId/students/:studentId/tasks/:taskId
 //@desc change tasks status to completed
 //@access private/teacher || private/student
-export const completeTask = asyncHandler(async (req: Request<CompleteTaskInput>, res: Response<{}, {user: ResLocalsUser}>) => {
+export const completeTask = asyncHandler(async (req: Request<CompleteTaskInput["params"], {}, CompleteTaskInput["body"]>, res: Response<{}, {user: ResLocalsUser}>) => {
   const user = res.locals.user //TODO: check if this is safe
   const classId = Number(req.params.classId)
   const studentId = Number(req.params.studentId)
   const taskId = Number(req.params.taskId)
+  const body = req.body
 
-  //return error if user is a teacher and is not the owner of the class
+  //return error if user is teacher and not the owner of the class or if class does not exist
+  const queriedClass = await prisma.classes.findUnique({
+    where: {
+      id: classId,
+    },
+  })
+  if (!queriedClass || (user.accountType === 'TEACHER' && queriedClass.user_id != user.id)) {
+    res.status(401)
+    throw new Error('Not authorized')
+  }
 
   //return error if user is a student and is not the student from the params
+  if (user.accountType === 'STUDENT' && user.id != studentId) {
+    res.status(401)
+    throw new Error('Not authorized')
+  }
 
-  //get users_classes_id for the student in the class
+  //TODO: i dont think i need this check
+  //query users_classes table to see if student is in class
+  const queriedStudent = await prisma.users_classes.findUnique({
+    where: {
+      user_id_class_id: { // TODO: check if this works
+        user_id: studentId,
+        class_id: classId,
+      },
+    },
+  })
 
   //if student is not in class, return error
+  if (!queriedStudent) {
+    res.status(401)
+    throw new Error('Not authorized')
+  }
 
   //update (find with user_id and class_id and task_id) tasks status to completed in db
+  const updatedTask = await prisma.tasks.updateMany({
+    where: {
+      user_id: studentId,
+      class_id: classId,
+      id: taskId,
+    },
+    data: {
+      completed: body.completed === 'true' ? true : false, //TODO:should i cast this to a boolean? 
+    },
+  })
+
+  if (updatedTask.count === 0) {
+    res.status(404)
+    throw new Error('Task not found')
+  }
 
   //return task + success message
+  res.status(200).json({message: 'Task completed status changed'})
 
   //TODO: what response do i get?
   //TODO: what happens if task is already completed?
@@ -144,15 +187,37 @@ export const deleteTask = asyncHandler(async (req: Request<DeleteTaskInput>, res
   const taskId = Number(req.params.taskId)
 
   //return error if user is not a teacher
+  if (user.accountType !== 'TEACHER') {
+    res.status(401)
+    throw new Error('Not authorized')
+  }
 
-  //return error if user is a teacher and is not the owner of the class
+  //return error if user is teacher and not the owner of the class or if class does not exist
+  const queriedClass = await prisma.classes.findUnique({
+    where: {
+      id: classId,
+    },
+  })
+  if (!queriedClass || (user.accountType === 'TEACHER' && queriedClass.user_id != user.id)) {
+    res.status(401)
+    throw new Error('Not authorized')
+  }
 
-  //get users_classes_id for the student in the class
+  //delete task from db (find with users_id classes_id and task_id)
+  const deletedTask = await prisma.tasks.deleteMany({
+    where: {
+      user_id: studentId,
+      class_id: classId,
+      id: taskId,
+    },
+  })
 
-  //if student is not in class, return error
-
-  //delete task from db (find with users_classes_id and task_id)
+  if (deletedTask.count === 0) {
+    res.status(404)
+    throw new Error('Task not found')
+  }
 
   //return success message
+  res.status(200).json({message: 'Task deleted'})
 
 })

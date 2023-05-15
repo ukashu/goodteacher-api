@@ -76,13 +76,13 @@ export const deleteClass = asyncHandler(async (req: Request<DeleteClassInput>, r
   //get class id from req.params
   const classId = Number(req.params.classId)
 
-  //throw error if users id doesn't match the class owners user id
+  //throw error if users id doesn't match the class owners user id or if class doesn't exist
   const myClass = await prisma.classes.findUnique({
     where: {
       id: classId,
     },
   })
-  if (myClass.user_id != user.id) {
+  if (!myClass || myClass.user_id != user.id) {
     res.status(401)
     throw new Error('Not authorized')
   }

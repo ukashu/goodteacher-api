@@ -20,14 +20,14 @@ export const getStudentsInClass = asyncHandler(async (req: Request<GetStudentsIn
     throw new Error('Not authorized')
   }
 
-  //return error if user is not the owner of the class
+  //return error if class does not exist or user is not the owner of the class
   const queriedClass = await prisma.classes.findUnique({
     where: {
       id: classId,
     },
   })
 
-  if (queriedClass.user_id != user.id) {
+  if (!queriedClass || queriedClass.user_id != user.id) {
     res.status(401)
     throw new Error('Not authorized')
   }
