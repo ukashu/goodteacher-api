@@ -5,12 +5,15 @@ const errorHandler = (err, req, res, next) => {
 
   //handle zod errors
   if (err.name === 'ZodError') {
+    res.status(404)
     res.json({
+      error: true,
       message: err.issues[0].message,
       stack: process.env.NODE_ENV === 'production' ? null : err.stack
     })
   } else {
     res.json({
+      error: true,
       message: err.message,
       stack: process.env.NODE_ENV === 'production' ? null : err.stack
     })
