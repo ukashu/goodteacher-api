@@ -102,6 +102,7 @@ const login = asyncHandler( async(req: Request<{}, {}, LoginUserInput>, res: Res
         id: user.id,
         name: user.name,
         email: user.email,
+        accountType: user.type,
         token: generateToken(user.id)
     })
   } else {
