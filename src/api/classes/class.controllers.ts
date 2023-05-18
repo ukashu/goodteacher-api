@@ -31,7 +31,7 @@ export const getMyClasses = asyncHandler(async (req: Request, res: Response<{}, 
       },
     })
 
-    res.status(200).json({message: 'Query successful', myClasses})
+    res.status(200).json({message: 'Query successful', myClasses, accountType: user.accountType})
 
   } else {
     //return error if user is not a teacher or student
