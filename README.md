@@ -9,6 +9,7 @@ TODO:
   - change tasks: remove user_id and class_id fields and add users_classes_id (consider this, although class id and user id might be more futureptoof(request all tasks in bulk))
   - Add due date property to tasks (or don't)
   - Add name, content to tasks
+  - Add class_name to users_classes
 
 teacher id 22 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImlhdCI6MTY4MzcyMjgwMywiZXhwIjoxNjgzODA5MjAzfQ.hutazaOQr7Dx6ow96-0090ZN6ZwEKgSfvHFfl4gfW5Y
 student id 30 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzAsImlhdCI6MTY4MzgwNDI1MywiZXhwIjoxNjg2Mzk2MjUzfQ.HBPK6R9rIuH3YYZfMwypjM_t9UuWeY_CpDDrEf_oaAY
