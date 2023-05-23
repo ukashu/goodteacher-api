@@ -78,7 +78,7 @@ export const addStudentToClass = asyncHandler(async (req: Request<AddStudentToCl
   //return error if user with that email does not exist or its userType is not STUDENT
   const student = await prisma.users.findUnique({
     where: {
-      email: body.studentEmail,
+      email: body.email,
     },
   })
 
@@ -105,7 +105,7 @@ export const addStudentToClass = asyncHandler(async (req: Request<AddStudentToCl
     data: {
       user_id: student.id,
       class_id: classId,
-      user_alias: body.studentAlias,
+      user_alias: body.alias,
     },
   })
 

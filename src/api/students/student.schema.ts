@@ -13,8 +13,8 @@ export const addStudentToClassSchema = z.object({
     classId: z.string().regex(new RegExp("^[0-9]+$"))
   }),
   body: z.object({
-    studentEmail: z.string().email("Not a valid email"),
-    studentAlias: z.string().min(1, "Alias must be at least 1 character long").max(25, "Alias must be at most 25 characters long")
+    email: z.string().email("Not a valid email"),
+    alias: z.string().min(1, "Alias must be at least 1 character long").max(25, "Alias must be at most 25 characters long")
   })
 })
 
