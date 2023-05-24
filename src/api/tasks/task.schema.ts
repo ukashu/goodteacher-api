@@ -18,7 +18,7 @@ export const createTaskSchema = z.object({
   }),
   body: z.object({
     title: z.string().min(1, "Title must be at least 1 character long").max(25, "Title must be at most 25 characters long"),
-    description: z.string().min(1, "Alias must be at least 1 character long").max(140, "Alias must be at most 140 characters long")
+    description: z.string().min(1, "Description must be at least 1 character long").max(140, "Description must be at most 140 characters long")
   })
 })
 
