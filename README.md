@@ -12,6 +12,8 @@ TODO:
   - Add class_name to users_classes
   - update task state should update true -> false and false -> true
   - task deletion should be happening in bulk 
+  - make task content optional
+  - on deleting user, tasks do not get deleted
 
 teacher id 22 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImlhdCI6MTY4MzcyMjgwMywiZXhwIjoxNjgzODA5MjAzfQ.hutazaOQr7Dx6ow96-0090ZN6ZwEKgSfvHFfl4gfW5Y
 student id 30 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzAsImlhdCI6MTY4MzgwNDI1MywiZXhwIjoxNjg2Mzk2MjUzfQ.HBPK6R9rIuH3YYZfMwypjM_t9UuWeY_CpDDrEf_oaAY
