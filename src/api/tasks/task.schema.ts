@@ -17,7 +17,8 @@ export const createTaskSchema = z.object({
     studentId: z.string().regex(new RegExp("^[0-9]+$"))
   }),
   body: z.object({
-    content: z.string().min(1, "Alias must be at least 1 character long").max(140, "Alias must be at most 25 characters long")
+    title: z.string().min(1, "Title must be at least 1 character long").max(25, "Title must be at most 25 characters long"),
+    description: z.string().min(1, "Alias must be at least 1 character long").max(140, "Alias must be at most 140 characters long")
   })
 })
 

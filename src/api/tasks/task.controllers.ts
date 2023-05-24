@@ -97,7 +97,8 @@ export const createTask = asyncHandler(async (req: Request<CreateTaskInput["para
   //create a new task in the db
   const newTask = await prisma.tasks.create({
     data: {
-      content: body.content,
+      title: body.title,
+      description: body.description,
       user_id: studentId,
       class_id: classId,
     },
