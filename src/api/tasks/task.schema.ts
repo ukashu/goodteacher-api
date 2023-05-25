@@ -29,7 +29,7 @@ export const completeTaskSchema = z.object({
     taskId: z.string().regex(new RegExp("^[0-9]+$"))
   }),
   body: z.object({
-    completed: boolTypes
+    completed: z.boolean()
   })
 })
 

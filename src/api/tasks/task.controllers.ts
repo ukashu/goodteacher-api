@@ -161,7 +161,7 @@ export const completeTask = asyncHandler(async (req: Request<CompleteTaskInput["
       id: taskId,
     },
     data: {
-      completed: body.completed === 'true' ? true : false, //TODO:should i cast this to a boolean? 
+      completed: body.completed, //TODO:should i cast this to a boolean? 
     },
   })
 
