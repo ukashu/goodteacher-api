@@ -5,9 +5,19 @@ import studentRoutes from "./api/students/student.routes.js"
 import taskRoutes from "./api/tasks/task.routes.js"
 import errorHandler from "./middleware/errorMiddleware.js"
 import 'dotenv/config'
+import rateLimit from 'express-rate-limit'
 
 const app = express()
 const PORT = Number(process.env.PORT) || 5000
+
+const limiter = rateLimit({
+	windowMs: 2 * 60 * 1000,
+	max: 5,
+	standardHeaders: true,
+	legacyHeaders: false,
+})
+
+app.use(limiter)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
