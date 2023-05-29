@@ -2,7 +2,7 @@ import rateLimit from 'express-rate-limit'
 import RedisStore from "rate-limit-redis";
 import { createClient } from "redis";
 
-const client = createClient();
+const client = createClient({ url: process.env.REDIS_URL });
 
 client.on('error', (err) => { throw new Error('Redis server error') });
 
