@@ -28,6 +28,23 @@ const register = asyncHandler( async(req: Request<{}, {}, RegisterUserInput>, re
       email: body.email
     }
   })
+
+  //if userexists and isnt activated - resend confirmation email
+  if (userExists && !userExists.activated) {
+    const transport = await sendConfirmationEmail(userExists.id, userExists.email)
+    //TODO: on mailing error delete user from database 
+    //OR if user is not activated for 24 hours delete user from database 
+    //OR if user is not activated resend confirmation email on register
+
+    if (transport) {
+      res.status(201).json({ message: "User already exists, confirmation email resent"})
+      return
+    } else {
+      res.status(400)
+      throw new Error('Invalid credentials')
+    }
+  }
+
   if (userExists) {
     throw new Error('User already exists')
   }
@@ -48,24 +65,14 @@ const register = asyncHandler( async(req: Request<{}, {}, RegisterUserInput>, re
 
   //If user was added successfully, send confirmation email
   if (user) {
-    const emailToken = jwt.sign({ id: user.id }, process.env.EMAIL_SECRET, {
-      expiresIn: '1d',
-    })
-    const url = `http://localhost:5000/api/users/confirmation/${emailToken}`
 
-    //Send email
-    const transport = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: user.email,
-      subject: 'Confirm Email',
-      html: `<html><body><p>Please click this link to confirm your email: </p><a href="${url}">${url}</a></body></html>`,
-    })
+    const transport = await sendConfirmationEmail(user.id, user.email)
     //TODO: on mailing error delete user from database 
     //OR if user is not activated for 24 hours delete user from database 
     //OR if user is not activated resend confirmation email on register
 
     if (transport) {
-      res.status(201).json({ message: "user created"})
+      res.status(201).json({ message: "User created, we sent you an email with a link to activate your account"})
     }
   } else {
     res.status(400)
@@ -136,6 +143,23 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
       expiresIn: '30d',
   })
+}
+
+const sendConfirmationEmail = async(id: number, email: string) => {
+  const emailToken = jwt.sign({ id }, process.env.EMAIL_SECRET, {
+    expiresIn: '1d',
+  })
+  const url = `http://localhost:5000/api/users/confirmation/${emailToken}`
+
+  //Send email
+  const transport = await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Confirm Email',
+    html: `<html><body><p>Please click this link to confirm your email: </p><a href="${url}">${url}</a></body></html>`,
+  })
+
+  return transport
 }
 
 export { login, register, confirmEmail }
