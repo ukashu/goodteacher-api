@@ -88,12 +88,6 @@ export const createTask = asyncHandler(async (req: Request<CreateTaskInput["para
     throw new Error('Not authorized')
   }
 
-  //if student did not accept the invite, return error
-  if (!queriedStudent.joined) {
-    res.status(401)
-    throw new Error('Not authorized')
-  }
-
   //create a new task in the db
   const newTask = await prisma.tasks.create({
     data: {
