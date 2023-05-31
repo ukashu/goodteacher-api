@@ -18,6 +18,7 @@ TODO:
   - add test error middleware
   - remove test error middleware
   - error logging
+  - handle unsuccessfull confirmation email sending DONE
 
 teacher id 22 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImlhdCI6MTY4MzcyMjgwMywiZXhwIjoxNjgzODA5MjAzfQ.hutazaOQr7Dx6ow96-0090ZN6ZwEKgSfvHFfl4gfW5Y
 student id 30 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzAsImlhdCI6MTY4MzgwNDI1MywiZXhwIjoxNjg2Mzk2MjUzfQ.HBPK6R9rIuH3YYZfMwypjM_t9UuWeY_CpDDrEf_oaAY

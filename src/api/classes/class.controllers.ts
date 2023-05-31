@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import { CreateClassInput, DeleteClassInput } from './class.schema.js'
 import { ResLocalsUser } from '../../util/types.js'
+import { getRandomInt } from "../../util/util.js"
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
@@ -60,6 +61,9 @@ export const createClass = asyncHandler(async (req: Request<{}, {}, CreateClassI
     data: {
       name: body.name,
       user_id: user.id,
+      x_offset: getRandomInt(-20, 500),
+      y_offset: getRandomInt(-10, 120),
+      path_rotation: getRandomInt(-179, 179)
     },
   })
 

@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "classes" ADD COLUMN     "path_rotation" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "x_offset" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "y_offset" INTEGER NOT NULL DEFAULT 0;
