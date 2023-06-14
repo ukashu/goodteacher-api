@@ -11,7 +11,7 @@ await client.connect();
 
 export const rateLimiter = rateLimit({
 	windowMs: 5 * 60 * 1000,
-	max: 100,
+	max: 200,
 	standardHeaders: true,
 	legacyHeaders: false,
 
