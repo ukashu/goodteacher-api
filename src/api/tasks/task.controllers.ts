@@ -32,6 +32,9 @@ export const getTasks = asyncHandler(async (req: Request<GetTasksInput>, res: Re
 
   //query the db for all tasks for the student in the class (find tasks by user_id and class_id)
   const tasks = await prisma.tasks.findMany({
+    orderBy: {
+      id: 'asc'
+    },
     where: {
       user_id: studentId,
       class_id: classId,
