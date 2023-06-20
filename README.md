@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./readme/banner-api.svg" width="60%" height="auto"/>
+  <img src="./readme/banner_api_round.svg" width="60%" height="auto"/>
   <p>:warning: This is a repository for the backend side of this project - you can find client side in the <a href="https://github.com/ukashu/goodteacher">goodteacher</a> repository.</p>
 </div>
 
