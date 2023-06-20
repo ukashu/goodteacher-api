@@ -1,29 +1,65 @@
-TODO:
-  - prevent user email enumeration in some way (maybe limit user creation requests)
-  - TTL for not accepted invites
-  - TTL for not confirmed accounts
-  - consider gatekeeping student/teacher in auth middleware for safety
-  - resend email confirmation functionality
-  - handle prisma errors in error middleware
-  - more descriptive error messages for development, for production change to less descriptive
-  - change tasks: remove user_id and class_id fields and add users_classes_id (consider this, although class id and user id might be more futureptoof(request all tasks in bulk))
-  - Add due date property to tasks (or don't)
-  - Add name, content to tasks
-  - Add class_name to users_classes
-  - update task state should update true -> false and false -> true
-  - task deletion should be happening in bulk 
-  - make task content optional
-  - on deleting user, tasks do not get deleted
-  - more descriptive error for user already in class
-  - add test error middleware
-  - remove test error middleware
-  - error logging
-  - handle unsuccessfull confirmation email sending DONE
-  - add orderBy to getTasks DONE
-  - add translation to API messages
+<div align="center">
+  <img src="./readme/banner-api.svg" width="60%" height="auto"/>
+  <p>:warning: This is a repository for the backend side of this project - you can find client side in the <a href="https://github.com/ukashu/goodteacher">goodteacher</a> repository.</p>
+</div>
 
-teacher id 22 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImlhdCI6MTY4MzcyMjgwMywiZXhwIjoxNjgzODA5MjAzfQ.hutazaOQr7Dx6ow96-0090ZN6ZwEKgSfvHFfl4gfW5Y
-student id 30 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzAsImlhdCI6MTY4MzgwNDI1MywiZXhwIjoxNjg2Mzk2MjUzfQ.HBPK6R9rIuH3YYZfMwypjM_t9UuWeY_CpDDrEf_oaAY
-teacher id 32 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzIsImlhdCI6MTY4MzgxMTA0NiwiZXhwIjoxNjg2NDAzMDQ2fQ.mgGhNnoMSvoOUwKGzP-9HqUjME-iqa-A9ewDils_LiY
-teacher id 33 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMsImlhdCI6MTY4NDE0MDU0MywiZXhwIjoxNjg2NzMyNTQzfQ.mAoRASe1ca6aCbLeaeHGynXcwKMQn2gQ4BZWLt-59rw
-student id 34 session token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzQsImlhdCI6MTY4NDE0MTE3MSwiZXhwIjoxNjg2NzMzMTcxfQ.68yBxDgB5T2KYfZZbgAI-rkJHwzKvZJMMxyZcFDt4_M
+>## Description
+Mobile app goodteacher is an online replacement of a student notebook. It's made for teachers and students, primarily with music schools in mind, but it can be used in any field. Teachers can create classes, add students to them and send out tasks for students. The students can join classes and manage their task - complete or add more of them. It is a mobile application written in React Native with a Node.js server and a database.
+
+>## Tech stack
+<ul>
+  <p>Server:</p>
+    <ul>
+      <li>Node.js</li>
+      <li>Express.js</li>
+    </ul>
+  <p>Database:</p>
+    <ul>
+      <li>PostgreSQL</li>
+      <li>Redis</li>
+      <li>Prisma</li>
+    </ul>
+  <p>Authorization:</p>
+    <ul>
+      <li>JSON Web Token</li>
+    </ul>
+  <p>Testing:</p>
+    <ul>
+      <li>Jest</li>
+    </ul>
+  <p>Other:</p>
+    <ul>
+      <li>Zod</li>
+      <li>i18next</li>
+      <li>Nodemailer</li>
+      <li>express-rate-limit</li>
+    </ul>
+</ul>
+
+>## Prerequisites
+
+<ul>
+  <li><a href="https://nodejs.org/">Node.js</a></li>
+  <li><a href="https://www.npmjs.com/">npm</a></li>
+  <li><a href="https://redis.io/">Redis</a></li>
+  <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
+</ul>
+
+>## Installation
+
+1. Clone the project repository.
+2. Go to the project directory.
+3. Create an .env file of the following structure in the main directory:
+```
+PORT = <server port number>
+JWT_SECRET = <key used for creating sesion tokens>
+NODE_ENV = <"development" or "production" - in production error responses don't include stack traces>
+EMAIL_USER = <outlook email for sending confirmation emails>
+EMAIL_PASS = <password to the email>
+EMAIL_SECRET = <key used for creating email confirmation tokens>
+REDIS_URL = <url of Your Redis server>
+DATABASE_URL = <for postgresql database hosted on local machine - postgres://[USERNAME]:[PASSWORD]@localhost:5432/[DATABASE_NAME]>
+```
+4. Run ```npm install``` <- this will install needed dependencies
+5. Run ```npx prisma migrate dev``` <- this will initialize the Postgres database
+6. Run ```npm run dev``` <- This will start the server
