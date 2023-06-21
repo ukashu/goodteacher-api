@@ -1,7 +1,7 @@
 [![pl](https://img.shields.io/badge/lang-pl-blue.svg)](https://github.com/ukashu/goodteacher-api/blob/main/readme/README.pl.md)
 <div align="center">
   <img src="./readme/banner_api_round.svg" width="60%" height="auto"/>
-  <p>:warning: This is a repository for the backend side of this project - you can find client side in the <a href="https://github.com/ukashu/goodteacher">goodteacher</a> repository.</p>
+  <p>:warning: This is a repository for the backend side of this project - you can find the client side in the <a href="https://github.com/ukashu/goodteacher">goodteacher</a> repository.</p>
 </div>
 
 >## Description
