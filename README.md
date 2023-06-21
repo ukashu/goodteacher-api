@@ -1,3 +1,4 @@
+[![pl](https://img.shields.io/badge/lang-pl-blue.svg)](https://github.com/ukashu/goodteacher-api/blob/main/readme/README.pl.md)
 <div align="center">
   <img src="./readme/banner_api_round.svg" width="60%" height="auto"/>
   <p>:warning: This is a repository for the backend side of this project - you can find client side in the <a href="https://github.com/ukashu/goodteacher">goodteacher</a> repository.</p>
@@ -19,7 +20,7 @@ Mobile app goodteacher is an online replacement of a student notebook. It's made
       <li>Redis</li>
       <li>Prisma</li>
     </ul>
-  <p>Authorization:</p>
+  <p>Authentication:</p>
     <ul>
       <li>JSON Web Token</li>
     </ul>
@@ -49,7 +50,7 @@ Mobile app goodteacher is an online replacement of a student notebook. It's made
 
 1. Clone the project repository.
 2. Go to the project directory.
-3. Create an .env file of the following structure in the main directory:
+3. Create an ```.env``` file in the main directory of the following structure:
 ```
 PORT = <server port number>
 JWT_SECRET = <key used for creating sesion tokens>
@@ -62,4 +63,4 @@ DATABASE_URL = <for postgresql database hosted on local machine - postgres://[US
 ```
 4. Run ```npm install``` <- this will install needed dependencies
 5. Run ```npx prisma migrate dev``` <- this will initialize the Postgres database
-6. Run ```npm run dev``` <- This will start the server
+6. Run ```npm run dev``` <- this will start the server
