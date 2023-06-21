@@ -101,7 +101,6 @@ export const createTask = asyncHandler(async (req: Request<CreateTaskInput["para
     },
   })
 
-  //return task + success message
   res.status(201).json({message: 'Task created', task: newTask})
   
 })
@@ -158,7 +157,7 @@ export const completeTask = asyncHandler(async (req: Request<CompleteTaskInput["
       id: taskId,
     },
     data: {
-      completed: body.completed, //TODO:should i cast this to a boolean? 
+      completed: body.completed,
     },
   })
 
@@ -171,7 +170,6 @@ export const completeTask = asyncHandler(async (req: Request<CompleteTaskInput["
   res.status(200).json({message: 'Task completed status changed'})
 
   //TODO: what response do i get?
-  //TODO: what happens if task is already completed?
 
 })
 

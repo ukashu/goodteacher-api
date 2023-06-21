@@ -32,9 +32,6 @@ const register = asyncHandler( async(req: Request<{}, {}, RegisterUserInput>, re
   //if userexists and isnt activated - resend confirmation email
   if (userExists && !userExists.activated) {
     const transport = await sendConfirmationEmail(userExists.id, userExists.email)
-    //TODO: on mailing error delete user from database 
-    //OR if user is not activated for 24 hours delete user from database 
-    //OR if user is not activated resend confirmation email on register
 
     if (transport) {
       res.status(201).json({ message: "User already exists, confirmation email resent"})
@@ -147,7 +144,7 @@ const generateToken = (id) => {
 
 const sendConfirmationEmail = async(id: number, email: string) => {
   const emailToken = jwt.sign({ id }, process.env.EMAIL_SECRET, {
-    expiresIn: '1d',
+    expiresIn: '30d',
   })
   const url = `http://localhost:5000/api/users/confirmation/${emailToken}`
 

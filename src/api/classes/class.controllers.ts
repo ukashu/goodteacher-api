@@ -24,8 +24,8 @@ export const getMyClasses = asyncHandler(async (req: Request, res: Response<{}, 
 
     res.status(200).json({message: 'Query successful', myClasses})
 
-  } else if (user.accountType == 'STUDENT') {
-  //else if user is a student get all classes from users_classes table
+  } else if (user.accountType == 'STUDENT') { //else if user is a student get all classes from users_classes table
+
     const myClasses = await prisma.users_classes.findMany({
       where: {
         user_id: user.id,
@@ -47,7 +47,6 @@ export const getMyClasses = asyncHandler(async (req: Request, res: Response<{}, 
 export const createClass = asyncHandler(async (req: Request<{}, {}, CreateClassInput>, res: Response<{}, {user: ResLocalsUser}>) => {
   const user = res.locals.user //TODO: check if this is safe
 
-  //destructure class data from req.body
   const body = req.body
 
   //return error if user is not a teacher
@@ -77,7 +76,6 @@ export const createClass = asyncHandler(async (req: Request<{}, {}, CreateClassI
 export const deleteClass = asyncHandler(async (req: Request<DeleteClassInput>, res: Response<{}, {user: ResLocalsUser}>) => {
   const user = res.locals.user //TODO: check if this is safe
 
-  //get class id from req.params
   const classId = Number(req.params.classId)
 
   //throw error if users id doesn't match the class owners user id or if class doesn't exist

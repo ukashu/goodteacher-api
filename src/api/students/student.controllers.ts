@@ -11,7 +11,6 @@ const prisma = new PrismaClient()
 export const getStudentsInClass = asyncHandler(async (req: Request<GetStudentsInClassInput>, res: Response<{}, {user: ResLocalsUser}>) => {
   const user = res.locals.user //TODO: check if this is safe
 
-  //destructure classId from req.params
   const classId = Number(req.params.classId)
 
   //return error if user is not a teacher
@@ -41,7 +40,7 @@ export const getStudentsInClass = asyncHandler(async (req: Request<GetStudentsIn
 
   //TODO: what happens if class has no students?
   //TODO: what happens if class does not exist?
-  //TODO: return only important data
+  //TODO: return only relevant data
 
   res.status(200).json({message: 'Query successful', classId, studentsInClass})
 })
@@ -52,7 +51,6 @@ export const getStudentsInClass = asyncHandler(async (req: Request<GetStudentsIn
 export const addStudentToClass = asyncHandler(async (req: Request<AddStudentToClassInput['params'], {}, AddStudentToClassInput['body']>, res: Response<{}, {user: ResLocalsUser}>) => {
   const user = res.locals.user //TODO: check if this is safe
 
-  //destructure classId from req.params
   const classId = Number(req.params.classId)
 
   const body = req.body
@@ -111,7 +109,6 @@ export const addStudentToClass = asyncHandler(async (req: Request<AddStudentToCl
 
   //TODO: less descriptive error messages
 
-  //return success message
   res.status(200).json({message: 'Student added to class', addedStudent})
 })
 
@@ -152,7 +149,6 @@ export const acceptInviteToClass = asyncHandler(async (req: Request<AcceptInvite
     throw new Error('Invalid')
   }
 
-  //return success message
   res.status(200).json({message: 'Student joined class', updateStudent})
 })
 
@@ -176,7 +172,7 @@ export const removeStudentFromClass = asyncHandler(async (req: Request<DeleteStu
     throw new Error('Not authorized')
   }
 
-  //if user is a student and user id does not match student id error
+  //error if user is a student and user id does not match student id
   if (user.accountType === 'STUDENT' && user.id != studentId) {
     res.status(401)
     throw new Error('Not authorized')
@@ -195,6 +191,5 @@ export const removeStudentFromClass = asyncHandler(async (req: Request<DeleteStu
     throw new Error('Student is not in the class')
   }
 
-  //return success message
   res.status(200).json({message: 'Student removed from class', removedStudent})
 })
