@@ -136,7 +136,7 @@ export const completeTask = asyncHandler(async (req: Request<CompleteTaskInput["
   //query users_classes table to see if student is in class
   const queriedStudent = await prisma.users_classes.findUnique({
     where: {
-      user_id_class_id: { // TODO: check if this works
+      user_id_class_id: { // TODO: check if this is a valid design
         user_id: studentId,
         class_id: classId,
       },
@@ -168,8 +168,6 @@ export const completeTask = asyncHandler(async (req: Request<CompleteTaskInput["
 
   //return task + success message
   res.status(200).json({message: 'Task completed status changed'})
-
-  //TODO: what response do i get?
 
 })
 
