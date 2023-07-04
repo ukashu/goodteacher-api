@@ -3,7 +3,7 @@ TODO:
   - TTL for not accepted invites
   - TTL for not confirmed accounts
   - consider gatekeeping student/teacher in auth middleware for safety
-  - resend email confirmation functionality
+  - resend email confirmation functionality DONE
   - handle prisma errors in error middleware
   - more descriptive error messages for development, for production change to less descriptive
   - change tasks: remove user_id and class_id fields and add users_classes_id (consider this, although class id and user id might be more futureptoof(request all tasks in bulk))
